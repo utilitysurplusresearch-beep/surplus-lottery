@@ -2,5 +2,5 @@ name = "surplus-lottery"
 compatibility_date = "2026-10-09"
 
 [assets]
-directory = "./"
+directory = "./public"
 not_found_handling = "404-page"
