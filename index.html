@@ -6,8 +6,8 @@ const f=document.getElementById('form'),p=document.getElementById('product'),siz
 p.addEventListener('change',()=>{sizeField.hidden=p.value!=='jacket';size.required=p.value==='jacket';if(p.value!=='jacket')size.value=''});
 function countdown(){const ms=Math.max(0,cutoff-Date.now()),h=Math.floor(ms/3600000),m=Math.floor(ms/60000)%60,sec=Math.floor(ms/1000)%60;document.getElementById('countdown').textContent=[h,m,sec].map(n=>String(n).padStart(2,'0')).join(':');if(!ms){f.hidden=true;document.getElementById('closed').style.display='block';document.querySelector('#entry .small').hidden=true}}
 const submitButton=document.getElementById('submit');
-window.lotteryTurnstileVerified=()=>{if(Date.now()<cutoff){submitButton.disabled=false;submitButton.textContent='ENTER LOTTERY →';document.getElementById('status').textContent=''}};
-window.lotteryTurnstileExpired=()=>{submitButton.disabled=true;submitButton.textContent='COMPLETE VERIFICATION'};
+window.lotteryTurnstileVerified=(token)=>{let field=f.querySelector('input[name="cf-turnstile-response"]');if(!field){field=document.createElement('input');field.type='hidden';field.name='cf-turnstile-response';f.appendChild(field)}field.value=token;if(Date.now()<cutoff){submitButton.disabled=false;submitButton.textContent='ENTER LOTTERY →';document.getElementById('status').textContent=''}};
+window.lotteryTurnstileExpired=()=>{const field=f.querySelector('input[name="cf-turnstile-response"]');if(field)field.value='';submitButton.disabled=true;submitButton.textContent='COMPLETE VERIFICATION'};
 if(TURNSTILE_SITE_KEY){
  const slot=document.getElementById('turnstile-slot');
  slot.innerHTML='<p style="font-size:11px;color:#999">LOADING VERIFICATION…</p>';
@@ -18,7 +18,7 @@ if(TURNSTILE_SITE_KEY){
 }
 const result=new URLSearchParams(location.search);
 if(result.get('lottery')==='success'){document.getElementById('entry').style.display='none';document.getElementById('success').style.display='block'}
-else if(result.get('lottery')==='error'){document.getElementById('status').textContent=result.get('reason')||'Registration was not completed.'}
+else if(result.get('lottery')==='error'){const message=result.get('reason')||'Registration was not completed.';const banner=document.createElement('div');banner.setAttribute('role','alert');banner.style.cssText='border:1px solid #777;padding:16px;margin:20px 0;color:#fff;font-size:13px;line-height:1.6';banner.textContent='ENTRY NOT RECEIVED — '+message;document.querySelector('.hero').insertAdjacentElement('afterend',banner);document.getElementById('status').textContent=message;setTimeout(()=>banner.scrollIntoView({block:'center',behavior:'smooth'}),150)}
 f.addEventListener('submit',e=>{if(Date.now()>=cutoff||submitButton.disabled){e.preventDefault();countdown()}else{submitButton.disabled=true}});
 countdown();setInterval(countdown,1000);
 </script><!-- Trigger Cloudflare production build for Turnstile rollout --></body></html>
