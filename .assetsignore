@@ -1,0 +1,11 @@
+.git/
+.wrangler/
+.github/
+node_modules/
+wrangler.toml
+wrangler.json
+wrangler.jsonc
+package.json
+package-lock.json
+*.log
+.DS_Store
