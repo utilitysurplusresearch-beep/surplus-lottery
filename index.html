@@ -21,4 +21,4 @@ if(result.get('lottery')==='success'){document.getElementById('entry').style.dis
 else if(result.get('lottery')==='error'){document.getElementById('status').textContent=result.get('reason')||'Registration was not completed.'}
 f.addEventListener('submit',e=>{if(Date.now()>=cutoff||submitButton.disabled){e.preventDefault();countdown()}else{submitButton.disabled=true}});
 countdown();setInterval(countdown,1000);
-</script></body></html>
+</script><!-- Trigger Cloudflare production build for Turnstile rollout --></body></html>
